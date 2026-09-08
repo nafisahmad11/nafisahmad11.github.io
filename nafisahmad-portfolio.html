@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nafis Ahmad — SOC Analyst in training</title>
+<meta name="description" content="Portfolio of Nafis Ahmad, aspiring SOC Analyst. MSc Information Systems, UCD. TryHackMe top 9%, 62 rooms completed.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B1220;
+    --panel:#101A2E;
+    --panel-alt:#0D1626;
+    --border:#233150;
+    --border-soft:#1A2740;
+    --text:#E7ECF5;
+    --text-dim:#8FA0B8;
+    --text-faint:#5C6C87;
+    --accent:#35D0C0;
+    --accent-dim:#1E7268;
+    --green:#4ADE80;
+    --amber:#F5A623;
+    --red:#F0555B;
+    --radius:5px;
+    --mono:'IBM Plex Mono', ui-monospace, monospace;
+    --sans:'IBM Plex Sans', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--accent); text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  a:focus-visible, button:focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
+  ::selection{background:var(--accent-dim); color:#fff;}
+
+  .wrap{max-width:1080px; margin:0 auto; padding:0 28px;}
+
+  /* ---------- top bar ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(11,18,32,0.9);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--border-soft);
+  }
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 28px; max-width:1080px; margin:0 auto;
+  }
+  .identity{
+    font-family:var(--mono); font-size:14px; color:var(--text-dim);
+  }
+  .identity b{color:var(--accent); font-weight:500;}
+  nav{display:flex; gap:22px; font-family:var(--mono); font-size:13.5px;}
+  nav a{color:var(--text-dim);}
+  nav a:hover{color:var(--accent); text-decoration:none;}
+  .navflag{color:var(--text-faint);}
+  .navtoggle{display:none; background:none; border:1px solid var(--border); color:var(--text-dim); border-radius:var(--radius); padding:6px 10px; font-family:var(--mono);}
+
+  /* ---------- hero ---------- */
+  .hero{
+    padding:64px 0 40px;
+    display:grid; grid-template-columns:1.1fr 0.9fr; gap:40px; align-items:start;
+  }
+  .term{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:8px;
+    overflow:hidden;
+  }
+  .term-chrome{
+    display:flex; align-items:center; gap:8px;
+    padding:10px 14px; border-bottom:1px solid var(--border-soft);
+    background:var(--panel-alt);
+  }
+  .dot{width:10px; height:10px; border-radius:50%;}
+  .dot.r{background:#3a4256;} .dot.y{background:#3a4256;} .dot.g{background:#3a4256;}
+  .term-title{margin-left:8px; font-family:var(--mono); font-size:12px; color:var(--text-faint);}
+  .term-body{padding:22px 20px 26px; font-family:var(--mono); font-size:14.5px; min-height:210px;}
+  .term-line{color:var(--text-dim); margin-bottom:6px;}
+  .term-line .p{color:var(--green);}
+  .term-out{color:var(--text); margin:2px 0 16px 0; white-space:pre-wrap;}
+  .term-out.role{color:var(--accent);}
+  .cursor{display:inline-block; width:8px; height:16px; background:var(--accent); vertical-align:middle; animation:blink 1s steps(1) infinite;}
+  @keyframes blink{50%{opacity:0;}}
+  .tag-row{display:flex; gap:8px; flex-wrap:wrap; margin-top:4px;}
+  .tag{
+    font-family:var(--mono); font-size:12px; color:var(--text-dim);
+    border:1px solid var(--border); border-radius:999px; padding:4px 10px;
+  }
+
+  .statboard{
+    display:grid; grid-template-columns:1fr 1fr; gap:12px;
+  }
+  .stat{
+    background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);
+    padding:18px 16px;
+  }
+  .stat-label{font-family:var(--mono); font-size:11.5px; color:var(--text-faint); letter-spacing:.02em;}
+  .stat-value{font-family:var(--mono); font-size:26px; color:var(--text); margin-top:6px; font-weight:500;}
+  .stat-value small{font-size:13px; color:var(--accent); margin-left:6px; font-weight:400;}
+  .stat.wide{grid-column:1 / -1; display:flex; align-items:center; justify-content:space-between;}
+  .stat.wide .stat-value{margin-top:0;}
+
+  section{padding:56px 0; border-top:1px solid var(--border-soft);}
+  .kicker{font-family:var(--mono); font-size:12.5px; color:var(--accent); margin-bottom:10px;}
+  h2{font-size:26px; font-weight:600; margin-bottom:18px; letter-spacing:-0.01em;}
+  .lede{color:var(--text-dim); max-width:64ch; margin-bottom:28px; font-size:15.5px;}
+
+  /* ---------- about ---------- */
+  .about-grid{display:grid; grid-template-columns:1.4fr 1fr; gap:48px;}
+  .about-grid p{color:var(--text-dim); max-width:62ch; margin-bottom:14px; font-size:15.5px;}
+  .about-grid p b{color:var(--text); font-weight:500;}
+  .meta-list{font-family:var(--mono); font-size:13.5px; color:var(--text-dim); display:flex; flex-direction:column; gap:10px;}
+  .meta-list span{color:var(--text-faint);}
+  .badge-strip{display:flex; flex-wrap:wrap; gap:8px; margin-top:22px;}
+  .badge-chip{
+    font-family:var(--mono); font-size:11.5px; color:var(--text-dim);
+    background:var(--panel); border:1px solid var(--border);
+    border-radius:999px; padding:5px 11px;
+  }
+
+  /* ---------- skills matrix ---------- */
+  table{width:100%; border-collapse:collapse; font-size:14.5px;}
+  thead th{
+    text-align:left; font-family:var(--mono); font-size:11.5px; color:var(--text-faint);
+    font-weight:500; padding:0 14px 10px; border-bottom:1px solid var(--border);
+  }
+  tbody td{padding:16px 14px; border-bottom:1px solid var(--border-soft); vertical-align:top;}
+  tbody tr:hover{background:var(--panel-alt);}
+  .domain{font-weight:600; color:var(--text);}
+  .tools{color:var(--text-dim); font-size:14px;}
+  .lvl{display:inline-flex; align-items:center; gap:7px; font-family:var(--mono); font-size:12.5px;}
+  .lvl-dot{width:8px; height:8px; border-radius:50%;}
+  .lvl-dot.high{background:var(--green);}
+  .lvl-dot.mid{background:var(--amber);}
+  .lvl-dot.build{background:var(--text-faint);}
+
+  /* ---------- learning log ---------- */
+  .tabs{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:22px;}
+  .tab{
+    font-family:var(--mono); font-size:13px; color:var(--text-dim);
+    background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);
+    padding:8px 13px; cursor:pointer;
+  }
+  .tab.active{color:var(--bg); background:var(--accent); border-color:var(--accent);}
+  .logpanel{display:none;}
+  .logpanel.active{display:block;}
+  .logrow{
+    display:flex; align-items:baseline; justify-content:space-between; gap:16px;
+    padding:12px 4px; border-bottom:1px solid var(--border-soft);
+  }
+  .logrow:last-child{border-bottom:none;}
+  .logname{font-size:15px; color:var(--text);}
+  .logdiff{font-family:var(--mono); font-size:11.5px; color:var(--green); white-space:nowrap;}
+  .logfoot{margin-top:18px; font-size:13.5px; color:var(--text-faint);}
+
+  /* ---------- cert ---------- */
+  .cert{
+    background:var(--panel); border:1px solid var(--border); border-radius:8px;
+    padding:28px; display:grid; grid-template-columns:auto 1fr; gap:26px; align-items:start;
+  }
+  .cert-badge{
+    width:64px; height:64px; border-radius:12px;
+    background:linear-gradient(160deg, var(--accent-dim), var(--panel-alt));
+    border:1px solid var(--accent); display:flex; align-items:center; justify-content:center;
+    font-family:var(--mono); font-weight:600; color:var(--accent); font-size:13px;
+  }
+  .cert h3{font-size:18px; margin-bottom:4px;}
+  .cert-date{font-family:var(--mono); font-size:12px; color:var(--text-faint); margin-bottom:14px;}
+  .cert-topics{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px;}
+  .cert-topics span{
+    font-size:12.5px; color:var(--text-dim); background:var(--panel-alt);
+    border:1px solid var(--border-soft); border-radius:999px; padding:4px 10px;
+  }
+  .cert ul{list-style:none; display:flex; flex-direction:column; gap:6px;}
+  .cert li{font-size:14px; color:var(--text-dim); display:flex; gap:8px;}
+  .cert li::before{content:"✓"; color:var(--green); font-family:var(--mono);}
+
+  /* ---------- contact ---------- */
+  .contact{display:grid; grid-template-columns:1fr 1fr; gap:32px; align-items:center;}
+  .contact-links{display:flex; flex-direction:column; gap:14px;}
+  .clink{
+    display:flex; align-items:center; gap:12px; font-family:var(--mono); font-size:14.5px; color:var(--text);
+    padding:12px 14px; background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);
+  }
+  .clink:hover{border-color:var(--accent); text-decoration:none;}
+  .clink svg{flex-shrink:0; color:var(--accent);}
+  .status-line{font-family:var(--mono); font-size:14px; color:var(--green);}
+  .status-line::before{content:"● "; }
+
+  /* ---------- projects ---------- */
+  .proj-meta{font-family:var(--mono); font-size:12.5px; color:var(--text-faint); margin-bottom:26px;}
+  .proj-meta b{color:var(--text-dim); font-weight:500;}
+  .proj-stats{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:36px;}
+  .proj-stats .stat-value{font-size:21px;}
+  .proj-grid{display:grid; grid-template-columns:1.5fr 1fr; gap:36px; margin-bottom:34px;}
+  .proj-grid p{color:var(--text-dim); max-width:60ch; margin-bottom:14px; font-size:15px;}
+  .proj-grid ol{color:var(--text-dim); padding-left:20px; font-size:14.5px; display:flex; flex-direction:column; gap:8px;}
+  .proj-grid ol li::marker{color:var(--accent); font-family:var(--mono);}
+  .callout{
+    background:var(--panel); border:1px solid var(--border); border-radius:8px;
+    padding:20px 22px;
+  }
+  .callout-label{font-family:var(--mono); font-size:11.5px; color:var(--accent); margin-bottom:10px;}
+  .callout p{color:var(--text-dim); font-size:14px; margin-bottom:10px; max-width:none;}
+  .callout p:last-child{margin-bottom:0;}
+  .resultgrid{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:1px;
+    background:var(--border); border:1px solid var(--border); border-radius:8px; overflow:hidden; margin-bottom:24px;
+  }
+  .resultcell{background:var(--panel); padding:16px 14px;}
+  .resultcell .rk{font-family:var(--mono); font-size:11px; color:var(--text-faint); margin-bottom:6px;}
+  .resultcell .rv{font-family:var(--mono); font-size:19px; color:var(--accent); font-weight:500;}
+  .stack-row{display:flex; flex-wrap:wrap; gap:8px;}
+
+  footer{padding:26px 0 40px; text-align:center; color:var(--text-faint); font-family:var(--mono); font-size:12.5px;}
+
+  @media (max-width:780px){
+    .hero{grid-template-columns:1fr; padding-top:36px;}
+    .about-grid{grid-template-columns:1fr; gap:30px;}
+    .contact{grid-template-columns:1fr;}
+    nav{display:none; position:absolute; top:100%; left:0; right:0; background:var(--bg); flex-direction:column; padding:14px 28px; border-bottom:1px solid var(--border-soft); gap:14px;}
+    nav.open{display:flex;}
+    .navtoggle{display:block;}
+    thead{display:none;}
+    tbody td{display:block; padding:4px 0;}
+    tbody tr{display:block; padding:14px 0; border-bottom:1px solid var(--border-soft);}
+    .cert{grid-template-columns:1fr;}
+    .proj-stats{grid-template-columns:1fr 1fr;}
+    .proj-grid{grid-template-columns:1fr;}
+    .resultgrid{grid-template-columns:1fr 1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="topbar">
+    <div class="identity"><b>nafis</b>@soc-workstation<span style="color:var(--text-faint)">:~$</span></div>
+    <nav id="nav">
+      <a href="#about"><span class="navflag">--</span>about</a>
+      <a href="#skills"><span class="navflag">--</span>skills</a>
+      <a href="#log"><span class="navflag">--</span>log</a>
+      <a href="#projects"><span class="navflag">--</span>projects</a>
+      <a href="#cert"><span class="navflag">--</span>cert</a>
+      <a href="#contact"><span class="navflag">--</span>contact</a>
+    </nav>
+    <button class="navtoggle" id="navtoggle" aria-label="Toggle menu">menu</button>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <section class="hero" style="border-top:none; padding-top:64px;">
+    <div class="term">
+      <div class="term-chrome">
+        <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+        <div class="term-title">session — tryhackme://nafis.ahmad</div>
+      </div>
+      <div class="term-body">
+        <div class="term-line"><span class="p">$</span> whoami</div>
+        <div class="term-out" style="font-size:20px; font-weight:500;">NAFIS AHMAD</div>
+        <div class="term-line"><span class="p">$</span> cat mission.txt</div>
+        <div class="term-out role" id="typedRole"></div>
+        <div class="term-line"><span class="p">$</span> cat tags.txt</div>
+        <div class="tag-row">
+          <span class="tag">[0x8][HACKER]</span>
+          <span class="tag">🇮🇪 Dublin, Ireland</span>
+          <span class="tag">Student — MSc Info Systems, UCD</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="statboard">
+      <div class="stat">
+        <div class="stat-label">TRYHACKME RANK</div>
+        <div class="stat-value">Top 9%<small>#231,366</small></div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">CURRENT STREAK</div>
+        <div class="stat-value">27<small>days</small></div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">BADGES EARNED</div>
+        <div class="stat-value">9</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">LEVEL</div>
+        <div class="stat-value">44</div>
+      </div>
+      <div class="stat wide">
+        <div class="stat-label">ROOMS COMPLETED</div>
+        <div class="stat-value">62</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="kicker">01 / background</div>
+    <h2>From IT support tickets to security alerts</h2>
+    <div class="about-grid">
+      <div>
+        <p>Nafis is working toward a <b>SOC Analyst</b> role, currently completing an <b>MSc in Information Systems at University College Dublin (2026)</b>. The path in started in IT support — troubleshooting Windows environments, managing Microsoft 365, and being the person users called when something broke.</p>
+        <p>That operational grounding is now being pointed at security: networking internals, Windows and Linux administration, log analysis, and incident response. Practice happens hands-on through <b>TryHackMe</b>, where consistent daily reps (27-day streak, 62 rooms completed) have built a working foundation across offensive and defensive fundamentals — currently ranked in the <b>top 9%</b> of all users.</p>
+        <p>Open to graduate SOC, IT support, or junior security analyst roles in Dublin and remote-friendly teams.</p>
+      </div>
+      <div>
+        <div class="meta-list">
+          <div><span>Location</span><br>Dublin, Ireland</div>
+          <div><span>Education</span><br>MSc Information Systems — UCD, 2026</div>
+          <div><span>Background</span><br>IT Support · Networking · Windows & M365</div>
+          <div><span>Status</span><br>Open to graduate roles</div>
+        </div>
+        <div class="badge-strip">
+          <span class="badge-chip">🔥 3 Day Streak</span>
+          <span class="badge-chip">🔥 7 Day Streak</span>
+          <span class="badge-chip">🌐 Networking Nerd</span>
+          <span class="badge-chip">🕸 Webbed</span>
+          <span class="badge-chip">💻 World Wide Web</span>
+          <span class="badge-chip">🐧 cat linux.txt</span>
+          <span class="badge-chip">📦 Session Held</span>
+          <span class="badge-chip">🛡 Metasploitable</span>
+          <span class="badge-chip">🪟 Blue</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS MATRIX -->
+  <section id="skills">
+    <div class="kicker">02 / skills matrix</div>
+    <h2>What's been trained, not just read about</h2>
+    <p class="lede">Every row below reflects rooms actually completed and practiced, not a list of buzzwords. Coverage level shows depth so far, not a ceiling.</p>
+    <table>
+      <thead>
+        <tr><th>Domain</th><th>Hands-on with</th><th>Coverage</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="domain">Networking</td>
+          <td class="tools">OSI model, TCP/IP, DNS, HTTP, LAN design, secure protocols (TLS/SSH/VPN)</td>
+          <td><span class="lvl"><span class="lvl-dot high"></span>Solid</span></td>
+        </tr>
+        <tr>
+          <td class="domain">Windows & Active Directory</td>
+          <td class="tools">Windows Fundamentals 1–3, PowerShell, Command Line, AD basics</td>
+          <td><span class="lvl"><span class="lvl-dot high"></span>Solid</span></td>
+        </tr>
+        <tr>
+          <td class="domain">Linux Administration</td>
+          <td class="tools">CLI navigation, shells, SSH auth, file permissions</td>
+          <td><span class="lvl"><span class="lvl-dot high"></span>Solid</span></td>
+        </tr>
+        <tr>
+          <td class="domain">SOC & Defensive Ops</td>
+          <td class="tools">Alert triage (SOC L2), CIA triad, defensive security fundamentals</td>
+          <td><span class="lvl"><span class="lvl-dot mid"></span>Building</span></td>
+        </tr>
+        <tr>
+          <td class="domain">Offensive Fundamentals</td>
+          <td class="tools">Nmap, Metasploit, Meterpreter, John the Ripper, EternalBlue (Blue)</td>
+          <td><span class="lvl"><span class="lvl-dot mid"></span>Building</span></td>
+        </tr>
+        <tr>
+          <td class="domain">Traffic & Crypto Analysis</td>
+          <td class="tools">Wireshark, Tcpdump, hashing, public-key crypto, CVE-2024-21413</td>
+          <td><span class="lvl"><span class="lvl-dot mid"></span>Building</span></td>
+        </tr>
+        <tr>
+          <td class="domain">Scripting & Web</td>
+          <td class="tools">JavaScript & Python fundamentals, SQL basics, web app mechanics</td>
+          <td><span class="lvl"><span class="lvl-dot build"></span>Early</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- LEARNING LOG -->
+  <section id="log">
+    <div class="kicker">03 / learning log</div>
+    <h2>62 rooms completed — selected highlights</h2>
+    <p class="lede">Grouped by domain. This is a sample, not the full list — the complete history is live on the TryHackMe profile linked below.</p>
+
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-tab="net">Networking</button>
+      <button class="tab" data-tab="win">Windows & AD</button>
+      <button class="tab" data-tab="lin">Linux</button>
+      <button class="tab" data-tab="soc">SOC / Defensive</button>
+      <button class="tab" data-tab="off">Offensive Tools</button>
+      <button class="tab" data-tab="cry">Crypto & Traffic</button>
+      <button class="tab" data-tab="scr">Scripting & Web</button>
+    </div>
+
+    <div class="logpanel active" data-panel="net">
+      <div class="logrow"><span class="logname">OSI Model</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">DNS in Detail</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">HTTP in Detail</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">Networking Core Protocols</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">Networking Secure Protocols</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">Client-Server Basics</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">Packets & Frames</span><span class="logdiff">EASY</span></div>
+    </div>
+
+    <div class="logpanel" data-panel="win">
+      <div class="logrow"><span class="logname">Windows Fundamentals 1</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">Windows Fundamentals 2</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">Windows Fundamentals 3</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">Windows PowerShell</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">Active Directory Basics</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">Windows Command Line</span><span class="logdiff">EASY</span></div>
+    </div>
+
+    <div class="logpanel" data-panel="lin">
+      <div class="logrow"><span class="logname">Linux Fundamentals (Pt1)</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">Linux Fundamentals Part 2</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">Linux Fundamentals Part 3</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">Linux CLI Basics</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">Linux Shells</span><span class="logdiff">EASY</span></div>
+    </div>
+
+    <div class="logpanel" data-panel="soc">
+      <div class="logrow"><span class="logname">SOC L2 Alert Triage</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">Defensive Security Intro</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">Become a Defender</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">The CIA Triad</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">Careers in Cyber</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">Lookback</span><span class="logdiff">EASY</span></div>
+    </div>
+
+    <div class="logpanel" data-panel="off">
+      <div class="logrow"><span class="logname">Offensive Security Intro</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">Become a Hacker</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">Blue</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">Metasploit: Introduction</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">Metasploit: Exploitation</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">Metasploit: Meterpreter</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">Nmap: The Basics</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">John the Ripper: The Basics</span><span class="logdiff">EASY</span></div>
+    </div>
+
+    <div class="logpanel" data-panel="cry">
+      <div class="logrow"><span class="logname">Wireshark: The Basics</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">Tcpdump: The Basics</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">Cryptography Basics</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">Public Key Cryptography Basics</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">Hashing Basics</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">Moniker Link (CVE-2024-21413)</span><span class="logdiff">EASY</span></div>
+    </div>
+
+    <div class="logpanel" data-panel="scr">
+      <div class="logrow"><span class="logname">JavaScript Essentials</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">JavaScript: Simple Demo</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">Python: Simple Demo</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">Web Application Basics</span><span class="logdiff">EASY</span></div>
+      <div class="logrow"><span class="logname">Database SQL Basics</span><span class="logdiff">EASY</span></div>
+    </div>
+
+    <div class="logfoot">Full history → <a href="https://tryhackme.com/p/nafis.ahmad" target="_blank" rel="noopener">tryhackme.com/p/nafis.ahmad</a></div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="kicker">04 / featured project</div>
+    <h2>Machine Learning-Based Phishing Website Detection</h2>
+    <div class="proj-meta">
+      <b>IS41070 — Machine Learning Foundations</b> · MSc Information Systems, UCD · PhiUSIIL Phishing URL Dataset (UCI ML Repository)
+    </div>
+
+    <div class="proj-stats">
+      <div class="stat"><div class="stat-label">DATASET SIZE</div><div class="stat-value">235,370<small>URLs</small></div></div>
+      <div class="stat"><div class="stat-label">MODELS COMPARED</div><div class="stat-value">6<small>+ baseline</small></div></div>
+      <div class="stat"><div class="stat-label">FINAL TEST F1</div><div class="stat-value">99.98%</div></div>
+      <div class="stat"><div class="stat-label">TEST ERRORS</div><div class="stat-value">5<small>/ 35,306</small></div></div>
+    </div>
+
+    <div class="proj-grid">
+      <div>
+        <p>A supervised binary classifier that distinguishes phishing websites from legitimate ones using 50 engineered URL and webpage features — transport protocol, domain structure, character composition, and content signals. Phishing was set as the positive class so precision, recall and F1 map directly onto a security-relevant question: <b>how many malicious sites slip through, and how many legitimate sites get wrongly blocked?</b></p>
+        <p>The pipeline was built with leakage prevention as a first-class concern: duplicate URLs were removed <i>before</i> the stratified 70/15/15 split, and the held-out test set was touched exactly once, after the final model and hyperparameters were already locked in.</p>
+        <ol>
+          <li>EDA on 235,795 raw observations — class balance, skew, multicollinearity, high-cardinality fields</li>
+          <li>Leakage-safe cleaning &amp; stratified train / validation / test split</li>
+          <li>Six classifiers trained: Logistic Regression, Decision Tree, Random Forest, Linear SVM, Gaussian Naïve Bayes, Histogram Gradient Boosting</li>
+          <li>Dominant-feature ablation — removed 3 suspiciously strong predictors to pressure-test whether "near-perfect" results were genuine</li>
+          <li>Focused hyperparameter tuning, then 5-fold stratified cross-validation on the top finalists</li>
+          <li>One-time held-out test evaluation, followed by permutation-importance interpretation</li>
+        </ol>
+      </div>
+      <div class="callout">
+        <div class="callout-label">Why this matters for security work</div>
+        <p>Several models scored a perfect F1 of 1.000 on first pass — a result treated as a warning sign, not a win. An ablation test removing the three most dominant features exposed that Gaussian Naïve Bayes had been leaning almost entirely on them (F1 fell from 0.999 to 0.915), while the boosting model barely moved.</p>
+        <p>That instinct — distrust results that look too clean, verify before trusting the alert — is the same posture SOC triage needs when a detection rule looks suspiciously perfect.</p>
+      </div>
+    </div>
+
+    <h3 style="font-size:15px; color:var(--text-dim); font-weight:500; margin-bottom:14px;">Final model — Histogram Gradient Boosting</h3>
+    <div class="resultgrid">
+      <div class="resultcell"><div class="rk">ACCURACY</div><div class="rv">99.99%</div></div>
+      <div class="resultcell"><div class="rk">PRECISION</div><div class="rv">99.99%</div></div>
+      <div class="resultcell"><div class="rk">RECALL</div><div class="rv">99.97%</div></div>
+      <div class="resultcell"><div class="rk">ROC-AUC</div><div class="rv">0.99999</div></div>
+    </div>
+    <p style="color:var(--text-dim); font-size:14px; max-width:70ch; margin-bottom:22px;">On the untouched 35,306-row test set: 20,227 true negatives, 1 false positive, 4 false negatives, 15,074 true positives. Permutation importance ranked <b style="color:var(--text)">IsHTTPS</b>, <b style="color:var(--text)">NoOfSubDomain</b> and <b style="color:var(--text)">LineOfCode</b> as the strongest retained signals. Limitations are reported directly: the split was row-level rather than domain-grouped, no chronological or external-dataset validation was performed, and the 4 false negatives are treated as a real risk, not a rounding error.</p>
+
+    <div class="stack-row">
+      <span class="badge-chip">Python</span>
+      <span class="badge-chip">pandas / NumPy</span>
+      <span class="badge-chip">scikit-learn</span>
+      <span class="badge-chip">Histogram Gradient Boosting</span>
+      <span class="badge-chip">matplotlib / seaborn</span>
+      <span class="badge-chip">Jupyter</span>
+    </div>
+  </section>
+
+  <!-- CERTIFICATION -->
+  <section id="cert">
+    <div class="kicker">05 / certification</div>
+    <h2>Verified credential</h2>
+    <div class="cert">
+      <div class="cert-badge">SEC0</div>
+      <div>
+        <h3>Pre Security (SEC0) Certification — TryHackMe</h3>
+        <div class="cert-date">Issued August 30, 2026</div>
+        <div class="cert-topics">
+          <span>Computer fundamentals</span>
+          <span>Operating systems fundamentals</span>
+          <span>Software basics</span>
+          <span>Network communication</span>
+          <span>Web & internet foundations</span>
+          <span>Security awareness</span>
+        </div>
+        <ul>
+          <li>Designers, Writers, and the Right Hardware</li>
+          <li>Who's Logged In?</li>
+          <li>Lost in Translation</li>
+          <li>The Presentation That Froze</li>
+          <li>404 Errors and Broken Links</li>
+          <li>The 2:47 AM Breach</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="kicker">06 / contact</div>
+    <h2>Let's talk</h2>
+    <div class="contact">
+      <div>
+        <p style="color:var(--text-dim); max-width:46ch; margin-bottom:18px; font-size:15.5px;">Looking for graduate SOC, IT support, or junior security analyst opportunities in Dublin or remote-friendly teams. Reach out directly, or find the full activity history on TryHackMe.</p>
+        <div class="status-line">Open to opportunities</div>
+      </div>
+      <div class="contact-links">
+        <a class="clink" href="mailto:nafeezahmad70@gmail.com">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+          nafeezahmad70@gmail.com
+        </a>
+        <a class="clink" href="https://www.linkedin.com/in/nafisahmad11/" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.14 1.45-2.14 2.94v5.66H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+          linkedin.com/in/nafisahmad11
+        </a>
+        <a class="clink" href="https://tryhackme.com/p/nafis.ahmad" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 17l6-6-6-6"/><path d="M12 19h8"/></svg>
+          tryhackme.com/p/nafis.ahmad
+        </a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>© Nafis Ahmad — nafisahmad.me</footer>
+
+<script>
+  // mobile nav toggle
+  document.getElementById('navtoggle').addEventListener('click', function(){
+    document.getElementById('nav').classList.toggle('open');
+  });
+
+  // typed role line (single orchestrated hero moment)
+  const roleText = "Turning IT support instincts into SOC-ready threat detection.";
+  const el = document.getElementById('typedRole');
+  let i = 0;
+  function type(){
+    if(i <= roleText.length){
+      el.textContent = roleText.slice(0, i);
+      i++;
+      setTimeout(type, 28);
+    } else {
+      el.innerHTML = roleText + '<span class="cursor"></span>';
+    }
+  }
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    el.textContent = roleText;
+  } else {
+    type();
+  }
+
+  // learning log tabs
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.logpanel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.querySelector('.logpanel[data-panel="'+tab.dataset.tab+'"]').classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>
